@@ -1,0 +1,10 @@
+name : mvimagetosubdir
+cmdname : mvimagetosubdir
+summary : Move image file to the subdirectory
+description : Move image file to the subdirectory
+version : 1.0.0
+changelog : first release
+url : https://github.com/greymd/mv_image_to_subdir
+author : greymd
+email : yamadagrep@gmail.com
+libdir : null
