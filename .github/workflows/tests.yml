@@ -9,5 +9,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: test
-      run: echo test
+    - name: Run tests provided by bats
+      run: ./test.sh
