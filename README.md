@@ -20,6 +20,11 @@ $ mv_image_to_subdir /path/to/image.jpg
 ~~~~~
 => `image.jpg` is moved to `/path/to/YYYY-MM-DD/image.jpg`
 
+~~~~~bash
+$ ENABLE_DRY_RUN=1 mv_image_to_subdir /path/to/image.jpg
+~~~~~
+=> Dry run.
+
 ## Installation
 
 ### For Debian base distros
