@@ -6,10 +6,10 @@ Execute following procedure automatically.
 
 * **(2) Create the subdirectory having the name "YYYY-MM-DD" format on the same directory where the image file exists.**
 
-Following rule is applied then.
-  - If the image file includes the date "YYYY-MM-DD" format at the beginning of its name, follows it.
-  - If above condition is not satisfied, exif:DateTime is refered.
-  - If above one is also unsatsfied, modified date of the file is used finally.
+  - Then, following rule is applied.
+    - If the image file includes the date format "YYYY-MM-DD" at the beginning of its name, follows it.
+    - If above condition is not satisfied, `exif:DateTime` is used instead.
+    - If above one is also unsatsfied, modified date of the file is used finally.
 
 * **(3) Move the image file to the subdirectory**
 
