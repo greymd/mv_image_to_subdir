@@ -3,19 +3,21 @@ set -u
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")" && pwd)"
 readonly SHOW_IMAGE_DATE_CMD="$THIS_DIR/show_image_date"
 readonly ENABLE_DRY_RUN=${ENABLE_DRY_RUN:-0}
-EXEC="sh -x"
 
 main () {
+  local _exec
   if [[ $ENABLE_DRY_RUN -eq 1 ]];then
-    EXEC="cat"
+    _exec="cat"
+  else
+    _exec="sh -x"
   fi
   local _date
   local _target_dir
   for img in "$@";do
     _date="$("$SHOW_IMAGE_DATE_CMD" "$img")" || continue
     _target_dir="$(dirname "$img")/$_date"
-    echo "mkdir \"$_target_dir\"" | $EXEC
-    echo "mv \"$img\" \"$_target_dir\"" | $EXEC
+    echo "mkdir \"$_target_dir\"" | $_exec
+    echo "mv \"$img\" \"$_target_dir\"" | $_exec
   done
 }
 

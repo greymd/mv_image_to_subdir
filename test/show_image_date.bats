@@ -2,10 +2,16 @@
 readonly TARGET_COMMAND="../bin/show_image_date"
 
 @test "show_image_date filename" {
-  ENABLE_DEBUG=0 run "$TARGET_COMMAND" "/path/to/test test/2019-09-29 22.02.51.jpg"
+  ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.png"
   [ "$status" -eq 0 ]
-  [ "${lines[$((${#line[@]} - 1))]}" = "2019-09-29" ]
+  [ "${lines[$((${#line[@]} - 1))]}" = "2019-02-02" ]
 }
+
+@test "show_image_date file does not exist" {
+  ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/2019-02-02 hogehoge.png"
+  [ "$status" -eq 1 ]
+}
+
 
 @test "show_image_date stat" {
   ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/dummy.jpg"

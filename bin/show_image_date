@@ -66,6 +66,10 @@ get_image_date () {
 main () {
   local _target="$1"
   local _date
+  if ! [[ -e $_target ]] ;then
+    printf "%s\\n" "Error:$_target: file does not exist." >&2
+    return 1
+  fi
   if _date="$(get_image_date "$_target")" ;then
     printf "%s\\n" "$_date"
     return 0
