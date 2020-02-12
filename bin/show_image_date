@@ -8,7 +8,7 @@ msg_debug() {
   fi
 }
 
-get_datetime_filename () {
+get_image_date_filename () {
   msg_debug "start"
   local _target="$1"
   local _pat='^([0-9]{4}-[0-9]{2}-[0-9]{2}) [0-9]{2}\.[0-9]{2}\.[0-9]{2}\.'
@@ -22,7 +22,7 @@ get_datetime_filename () {
   printf "%s\\n" "$_date"
 }
 
-get_datetime_exif () {
+get_image_date_exif () {
   msg_debug "start"
   local _target="$1"
   local _date
@@ -34,7 +34,7 @@ get_datetime_exif () {
   printf "%s\\n" "$_date"
 }
 
-get_datetime_modified () {
+get_image_date_modified () {
   msg_debug "start"
   local _target="$1"
   if ! stat -c '%y' "$_target" | awk '{print $1}' ;then
@@ -43,19 +43,19 @@ get_datetime_modified () {
   fi
 }
 
-get_datetime () {
+get_image_date () {
   msg_debug "start"
   local _target="$1"
   local _date
-  _date=$(get_datetime_filename "$_target") && {
+  _date=$(get_image_date_filename "$_target") && {
     printf "%s\\n" "$_date"
     return 0
   }
-  _date=$(get_datetime_exif "$_target") && {
+  _date=$(get_image_date_exif "$_target") && {
     printf "%s\\n" "$_date"
     return 0
   }
-  _date=$(get_datetime_modified "$_target") && {
+  _date=$(get_image_date_modified "$_target") && {
     printf "%s\\n" "$_date"
     return 0
   }
@@ -65,7 +65,7 @@ get_datetime () {
 main () {
   local _target="$1"
   local _date
-  if _date="$(get_datetime "$_target")" ;then
+  if _date="$(get_image_date "$_target")" ;then
     printf "%s\\n" "$_date"
     return 0
   else
