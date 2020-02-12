@@ -10,4 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run tests provided by bats
-      run: ./test.sh
+      run: |
+        sudo apt install -y bats
+        ./test.sh
