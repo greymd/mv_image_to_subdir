@@ -22,8 +22,17 @@ $ mv_image_to_subdir /path/to/image.jpg
 
 ## Installation
 
-~~~~~
+### For Debian base distros
+~~~~~bash
 $ sudo apt install imagemagick
+$ curl -OL http://git.io/mv_image_to_subdir.deb && sudo dpkg -i ./mv_image_to_subdir.deb && rm ./mv_image_to_subdir.deb
+~~~~~
+
+### For Red Hat compatible distros
+
+~~~~~bash
+$ sudo yum install -y imagemagick
+$ sudo yum install -y http://git.io/mv_image_to_subdir.rpm
 ~~~~~
 
 ## Dependency
