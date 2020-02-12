@@ -8,6 +8,20 @@ msg_debug() {
   fi
 }
 
+msg_error() {
+  msg "Error" "$1"
+}
+
+msg_warn() {
+  msg "Warning" "$1"
+}
+
+msg() {
+  local _level="$1" ;shift
+  local _msg="$1"
+  printf "%s\\n" "[$_level]$(date "+[%F_%T]"):$_msg" >&2
+}
+
 get_image_date_filename () {
   msg_debug "start"
   local _target="$1"
@@ -29,7 +43,7 @@ get_image_date_exif () {
   local _date
   _date="$(identify -verbose "$_target" | awk '/exif:DateTime:/{gsub(":","-",$2); printf $2}')"
   if [[ -z "${_date}" ]];then
-    printf "%s\\n" "Warning:$_target: 'exitf:DateTime' is empty." >&2
+    msg_warn "$_target: 'exitf:DateTime' is empty."
     return 1
   fi
   printf "%s\\n" "$_date"
@@ -39,7 +53,7 @@ get_image_date_modified () {
   msg_debug "start"
   local _target="$1"
   if ! stat -c '%y' "$_target" | awk '{print $1}' ;then
-    printf "%s\\n" "Warning:$_target: stat command was not succeeded." >&2
+    msg_warn "$_target: stat command was not succeeded."
     return 1
   fi
 }
@@ -67,14 +81,14 @@ main () {
   local _target="$1"
   local _date
   if ! [[ -e $_target ]] ;then
-    printf "%s\\n" "Error:$_target: file does not exist." >&2
+    msg_error "$_target: file does not exist."
     return 1
   fi
   if _date="$(get_image_date "$_target")" ;then
     printf "%s\\n" "$_date"
     return 0
   else
-    printf "%s\\n" "Error:$_target: date cannot be set." >&2
+    msg_error "$_target: date cannot be set."
     return 1
   fi
 }
