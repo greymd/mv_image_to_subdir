@@ -21,6 +21,18 @@ main() {
   else
     dst_file="${dst}"
   fi
+
+  # Detect identical file (but original mv command can do it).
+  # if [[ -f "$src_file" ]] && [[ -f "$dst_file" ]] &&
+  #   [[ $(realpath "$src_file") != $(realpath "$dst_file") ]] &&
+  #   [[ "$(md5sum "$src_file" | awk '{print $1}')" == "$(md5sum "$dst_file" | awk '{print $1}')" ]] ;then
+  #   if [[ $ENABLE_DEBUG == 1 ]] ;then
+  #     echo rm -f "$src_file" >&2
+  #   else
+  #     rm -f "$src_file"
+  #   fi
+  # fi
+
   if [[ -e "$dst_file" ]] && ! [[ -d "$dst_file" ]] ;then
     local prefix="${dst_file}"
     local ext=
