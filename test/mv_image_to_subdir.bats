@@ -6,6 +6,7 @@ readonly THIS_DIR="$(cd ../bin/ && pwd)"
 setup () {
   touch -d 2020-02-12 data/dummy.jpg
   touch -d 2020-02-12 data/dummy.png
+  touch -d 2021-07-03 data/dummy2.jpg
 }
 
 @test "mv_image_to_subdir filename" {
@@ -41,4 +42,16 @@ setup () {
   assert_equal "mkdir 'data/2020-02-12'" "${lines[3]}"
   assert_equal "$THIS_DIR/mv_avoid_duplicate 'data/dummy.jpg' 'data/2020-02-12'" "${lines[4]}"
   assert_equal "touch -m 'data/2020-02-12'" "${lines[5]}"
+}
+
+@test "mv_image_to_subdir mv duplicated file" {
+  cp data/dummy2.jpg data/dummy2.jpg.bak
+  run "$TARGET_COMMAND" "data/dummy2.jpg"
+  assert_equal 0 "$status"
+  ls data/2021-07-03/dummy2.jpg
+  assert_equal 0 "$status"
+  ls data/2021-07-03/dummy2-001.jpg
+  assert_equal 0 "$status"
+  mv data/dummy2.jpg.bak data/dummy2.jpg
+  rm -f data/2021-07-03/dummy2-001.jpg
 }
