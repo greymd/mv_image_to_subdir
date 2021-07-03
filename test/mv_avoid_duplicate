@@ -1,0 +1,8 @@
+#!/usr/bin/env bats
+source ./assertions
+readonly TARGET_COMMAND="../bin/mv_avoid_duplicate"
+
+@test "mv_avoid_duplicate filename" {
+  ENABLE_DRY_RUN=1 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.png"
+  assert_equal "$status" 1
+}

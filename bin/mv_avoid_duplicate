@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -u
+readonly ENABLE_DEBUG=${ENABLE_DEBUG:-1}
+
+main() {
+  (( $# < 2 )) && {
+    echo "Two ore more arguments are required." >&2
+    return 1
+  }
+  local dst="${*: -1:1}" # The dstination is the last positional parameter
+  local src="${*: -2:1}"
+  local src_file=
+  local dst_file=
+  if ! [[ -e "$src" ]] ;then
+    echo "${src@Q} does not exit." >&2
+    return 1
+  fi
+  src_file="$(basename "$src")"
+  if [[ -d "$dst" ]]; then
+    dst_file="${dst%/}$src_file"
+  else
+    dst_file="${dst}"
+  fi
+  if [[ -e "$dst_file" ]] && ! [[ -d "$dst_file" ]] ;then
+    local prefix="${dst_file}"
+    local ext=
+    local count=1
+    if [[ -z "${prefix##*.*}" ]]; then
+      prefix=${prefix%.*}
+      ext=".${dst_file##*.}"
+    fi
+    dst_file="$prefix-$(printf "%03d" $count)$ext"
+    while [[ -e "$dst_file" ]];do
+      count=$((count+1))
+      dst_file="$prefix-$(printf "%03d" $count)$ext"
+    done
+    if [[ $ENABLE_DEBUG == 1 ]] ;then
+      echo command mv "${@:1:$#-1}" "$dst_file" >&2
+    else
+      command mv "${@:1:$#-1}" "$dst_file"
+    fi
+  else
+    if [[ $ENABLE_DEBUG == 1 ]] ;then
+      command mv "$@"
+    else
+      echo command mv "$@"
+    fi
+  fi
+  return 0
+}
+
+main ${1+"$@"}
