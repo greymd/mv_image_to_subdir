@@ -9,13 +9,13 @@ teardown() {
 
 @test "mv_avoid_duplicate file" {
   ENABLE_DEBUG=1 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.png"
-  assert_equal "$status" 1
+  assert_equal 1 "$status"
 }
 
 @test "mv_avoid_duplicate file.ext dir" {
   ENABLE_DEBUG=1 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.png" "data/subdir"
-  assert_equal "$status" 0
-  assert_equal "${lines[0]}" "command mv 'data/2019-02-02 13.13.13.png' 'data/subdir'"
+  assert_equal 0 "$status"
+  assert_equal "command mv 'data/2019-02-02 13.13.13.png' 'data/subdir'" "${lines[0]}"
 }
 
 @test "mv_avoid_duplicate file dir(name duplicated)" {
