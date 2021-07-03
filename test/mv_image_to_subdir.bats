@@ -2,6 +2,11 @@
 source ./assertions
 readonly TARGET_COMMAND="../bin/mv_image_to_subdir"
 
+setup () {
+  touch -d 2020-02-12 data/dummy.jpg
+  touch -d 2020-02-12 data/dummy.png
+}
+
 @test "mv_image_to_subdir filename" {
   ENABLE_DRY_RUN=1 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.png"
   assert_equal "$status" 0
