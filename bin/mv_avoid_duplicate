@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -u
-readonly ENABLE_DEBUG=${ENABLE_DEBUG:-1}
+readonly ENABLE_DEBUG=${ENABLE_DEBUG:-0}
+
+delegate_mv() {
+  if [[ $ENABLE_DEBUG == 0 ]] ;then
+    command mv "$@"
+  else
+    echo command mv "${@@Q}"
+  fi
+}
 
 main() {
   (( $# < 2 )) && {
@@ -9,31 +17,21 @@ main() {
   }
   local dst="${*: -1:1}" # The dstination is the last positional parameter
   local src="${*: -2:1}"
-  local src_file=
   local dst_file=
-  if ! [[ -e "$src" ]] ;then
-    echo "${src@Q} does not exit." >&2
-    return 1
-  fi
-  src_file="$(basename "$src")"
   if [[ -d "$dst" ]]; then
-    dst_file="${dst%/}$src_file"
+    dst_file="${dst%/}/$(basename "$src")"
   else
     dst_file="${dst}"
   fi
-
-  # Detect identical file (but original mv command can do it).
-  # if [[ -f "$src_file" ]] && [[ -f "$dst_file" ]] &&
-  #   [[ $(realpath "$src_file") != $(realpath "$dst_file") ]] &&
-  #   [[ "$(md5sum "$src_file" | awk '{print $1}')" == "$(md5sum "$dst_file" | awk '{print $1}')" ]] ;then
-  #   if [[ $ENABLE_DEBUG == 1 ]] ;then
-  #     echo rm -f "$src_file" >&2
-  #   else
-  #     rm -f "$src_file"
-  #   fi
-  # fi
-
-  if [[ -e "$dst_file" ]] && ! [[ -d "$dst_file" ]] ;then
+  if [[ -f "$src" ]] && [[ -f "$dst_file" ]]; then
+    local src_hash=0
+    local dst_hash=0
+    src_hash="$(md5sum "$src" | awk '{print $1}')"
+    dst_hash="$(md5sum "$dst_file" | awk '{print $1}')"
+    if [[ "$src_hash" == "$dst_hash" ]]; then
+      delegate_mv "$@"
+      exit $?
+    fi
     local prefix="${dst_file}"
     local ext=
     local count=1
@@ -46,19 +44,12 @@ main() {
       count=$((count+1))
       dst_file="$prefix-$(printf "%03d" $count)$ext"
     done
-    if [[ $ENABLE_DEBUG == 1 ]] ;then
-      echo command mv "${@:1:$#-1}" "$dst_file" >&2
-    else
-      command mv "${@:1:$#-1}" "$dst_file"
-    fi
+    delegate_mv "${@:1:$#-1}" "$dst_file"
+    exit $?
   else
-    if [[ $ENABLE_DEBUG == 1 ]] ;then
-      command mv "$@"
-    else
-      echo command mv "$@"
-    fi
+    delegate_mv "$@"
+    exit $?
   fi
-  return 0
 }
 
 main ${1+"$@"}
