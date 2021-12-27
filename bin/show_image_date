@@ -49,6 +49,18 @@ get_image_date_exif () {
   printf "%s\\n" "$_date"
 }
 
+get_image_date_orig_exif () {
+  msg_debug "start"
+  local _target="$1"
+  local _date
+  _date="$(identify -verbose "$_target" | awk '/exif:DateTimeOriginal:/{gsub(":","-",$2); printf $2}')"
+  if [[ -z "${_date}" ]];then
+    msg_warn "$_target: 'exitf:DateTimeOriginal' is empty."
+    return 1
+  fi
+  printf "%s\\n" "$_date"
+}
+
 get_image_date_modified () {
   msg_debug "start"
   local _target="$1"
@@ -63,6 +75,10 @@ get_image_date () {
   local _target="$1"
   local _date
   _date=$(get_image_date_filename "$_target") && {
+    printf "%s\\n" "$_date"
+    return 0
+  }
+  _date=$(get_image_date_orig_exif "$_target") && {
     printf "%s\\n" "$_date"
     return 0
   }
