@@ -28,9 +28,9 @@ setup () {
 @test "mv_image_to_subdir stat" {
   ENABLE_DRY_RUN=1 run "$TARGET_COMMAND" "data/dummy.jpg"
   assert_equal 0 "$status"
-  assert_equal "mkdir 'data/2020-02-12'" "${lines[6]}"
-  assert_equal "$THIS_DIR/mv_avoid_duplicate 'data/dummy.jpg' 'data/2020-02-12'" "${lines[7]}"
-  assert_equal "touch -m 'data/2020-02-12'" "${lines[8]}"
+  assert_equal "mkdir 'data/2020-02-12'" "${lines[-3]}"
+  assert_equal "$THIS_DIR/mv_avoid_duplicate 'data/dummy.jpg' 'data/2020-02-12'" "${lines[-2]}"
+  assert_equal "touch -m 'data/2020-02-12'" "${lines[-1]}"
 }
 
 @test "mv_image_to_subdir exif and stat" {
