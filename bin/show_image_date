@@ -39,6 +39,10 @@ get_image_date_filename () {
 
 get_image_date_exif () {
   msg_debug "start"
+  if ! grep -q -i -E '(jpg|jpeg|gif|png)$' <<< "${_target}" ; then
+    msg_warn "$_target: skip checking exif since it is not image."
+    return 1
+  fi
   local _target="$1"
   local _date
   _date="$(identify -verbose "$_target" | awk '/exif:DateTime:/{gsub(":","-",$2); printf $2}')"
@@ -51,6 +55,10 @@ get_image_date_exif () {
 
 get_image_date_orig_exif () {
   msg_debug "start"
+  if ! grep -q -i -E '(jpg|jpeg|gif|png)$' <<< "${_target}" ; then
+    msg_warn "$_target: skip checking exif since it is not image."
+    return 1
+  fi
   local _target="$1"
   local _date
   _date="$(identify -verbose "$_target" | awk '/exif:DateTimeOriginal:/{gsub(":","-",$2); printf $2}')"
