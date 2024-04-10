@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eu
+cd "$1"
+while read src dst; do
+  set -x;
+  mv_avoid_duplicate "$src"/* "$dst";
+  rm -rf "$src/.AppleDouble";
+  rm -rf "$src/Icon"$'\r';
+  rmdir "$src";
+  set +x;
+done < <(ls -1 | sort | uniq -w 10 -D | paste - -)
