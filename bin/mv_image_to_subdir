@@ -18,6 +18,7 @@ main () {
     _date="$("$SHOW_IMAGE_DATE_CMD" "$img")" || continue
     _target_dir="$(dirname "$img")/$_date"
     echo "mkdir ${_target_dir@Q}" | $_exec
+    echo "chmod 777 ${_target_dir@Q}" | $_exec
     echo "$MV ${img@Q} ${_target_dir@Q}" | $_exec
     echo "touch -m ${_target_dir@Q}" | $_exec
   done
