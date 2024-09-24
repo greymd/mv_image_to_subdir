@@ -3,6 +3,9 @@ set -eu
 cd "$1"
 while read src dst; do
   set -x;
+  if [[ ! -d "$src" ]]; then
+    continue
+  fi
   mv_avoid_duplicate "$src"/* "$dst";
   rm -rf "$src/.AppleDouble";
   rm -rf "$src/Icon"$'\r';
