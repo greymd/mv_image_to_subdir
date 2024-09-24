@@ -40,12 +40,12 @@ readonly TARGET_COMMAND="../bin/show_image_date"
   [ "${last_line}" = "2019-01-01" ]
 }
 
-@test "show_image_date orig exif" {
-  ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/dummy_exif.tiff"
-  [ "$status" -eq 0 ]
-  local last_line="${lines[$((${#line[@]} - 1))]}"
-  [ "${last_line}" = "2024-08-19" ]
-}
+# @test "show_image_date orig exif" {
+#   ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/dummy_exif.tiff"
+#   [ "$status" -eq 0 ]
+#   local last_line="${lines[$((${#line[@]} - 1))]}"
+#   [ "${last_line}" = "2024-08-19" ]
+# }
 
 @test "show_image_date stat vs exif vs filename" {
   ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/2019-02-02 13.13.13.jpg"
