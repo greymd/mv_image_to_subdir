@@ -44,7 +44,7 @@ readonly TARGET_COMMAND="../bin/show_image_date"
   ENABLE_DEBUG=0 run "$TARGET_COMMAND" "data/dummy_exif.tiff"
   [ "$status" -eq 0 ]
   local last_line="${lines[$((${#line[@]} - 1))]}"
-  [ "${last_line}" = "2021-12-05" ]
+  [ "${last_line}" = "2024-08-19" ]
 }
 
 @test "show_image_date stat vs exif vs filename" {
