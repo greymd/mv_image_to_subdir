@@ -3,12 +3,11 @@ set -eu
 cd "$1"
 while read src dst; do
   set -x;
-  if [[ ! -d "$src" ]]; then
-    continue
+  if [[ -d "${src%/}" ]] && [[ -d "${dst%/}" ]] ; then
+    mv_avoid_duplicate "${src%/}"/* "$dst";
+    rm -rf "${src%/}/.AppleDouble";
+    rm -rf "${src%/}/Icon"$'\r';
+    rmdir "${src%/}";
   fi
-  mv_avoid_duplicate "$src"/* "$dst";
-  rm -rf "$src/.AppleDouble";
-  rm -rf "$src/Icon"$'\r';
-  rmdir "$src";
   set +x;
-done < <(ls -1 | sort | uniq -w 10 -D | paste - -)
+done < <(ls -1 --file-type | sort | uniq -w 10 -D | paste - -)
